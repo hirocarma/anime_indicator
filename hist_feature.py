@@ -44,10 +44,7 @@ for file in files:
         (comparing_kp, comparing_des) = detector.detectAndCompute(comparing_img, None)
         matches = bf.match(target_des, comparing_des)
         dist = [m.distance for m in matches]
-        if len(dist) == 0:
-            ret = 0
-        else:
-            ret = sum(dist) / len(dist)
+        ret = sum(dist) / len(dist)
     except cv2.error:
         ret = 100000
     diff = diff + abs(prev - ret)
