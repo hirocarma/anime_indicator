@@ -45,7 +45,7 @@ def hist(IMG_DIR, files, IMG_OUT_DIR):
         prev_img = comp_img
         score = 1 - np.mean(scores) # 0 to 2
         total_score = total_score + score
-
+        fname = file.split('.')[0]
         if score > 0 or cnt == 0:
             if DEBUG == 1:
                 print(file, score, total_score)
@@ -53,14 +53,16 @@ def hist(IMG_DIR, files, IMG_OUT_DIR):
         else:
             if WRITE == 1:
                 z_cnt = str(cnt).zfill(5)
-                cv2.imwrite(IMG_OUT_DIR + 'eq' + z_cnt + '.jpg', comp_img)
+                cv2.imwrite(IMG_OUT_DIR + 'eq' + z_cnt + \
+                            '-' + fname + '.jpg', comp_img)
             if DEBUG == 1:
                 print('equal:', file, score, total_score)
         #scene frame
         if score > 1:
             if WRITE == 1:
                 z_scene_cnt = str(scene_cnt).zfill(5)
-                cv2.imwrite(IMG_OUT_DIR + 'scene' + z_scene_cnt + '.jpg', comp_img)
+                cv2.imwrite(IMG_OUT_DIR + 'scene' + z_scene_cnt + \
+                            '-' + fname + '.jpg', comp_img)
             if DEBUG == 1:
                 print('scene:', file, score, total_score)
             scene_cnt = scene_cnt + 1
