@@ -2,7 +2,7 @@
 import cv2
 import numpy as np
 
-DEBUG = 1
+DEBUG = 0
 WRITE = 1
 div = 30
 
@@ -30,10 +30,17 @@ def hist(IMG_DIR, files, IMG_OUT_DIR):
                     prev_img[int(y * hClp):int((y + 1) * hClp), \
                              int(x * wClp):int((x + 1) * wClp)]
                 color = ('b','g','r')
+                div_scores = []
                 for i,col in enumerate(color):
                     comp_hist = cv2.calcHist([comp_Clp],[i],None,[256],[0,256])
                     prev_hist = cv2.calcHist([prev_Clp],[i],None,[256],[0,256])
                     score = cv2.compareHist(prev_hist, comp_hist, cv2.HISTCMP_CORREL)
+                    div_scores.append(score)
+                    div_mean = 1 - np.mean(div_scores)
+                    if div_mean > 1.1 and WRITE == 1:
+                        cv2.rectangle(comp_img, (int(x * wClp), int(y * hClp)), \
+                                      (int((x + 1) * wClp), int((y + 1) * hClp)), \
+                                      (0, 0, int(div_mean * 500)), 1)
                     scores.append(score)
         prev_img = comp_img
         score = 1 - np.mean(scores) # 0 to 2
